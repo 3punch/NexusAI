@@ -1,0 +1,5 @@
+# Default ownership: the maintainer reviews everything initially.
+# As the team grows, move specific paths to their owners, e.g.:
+#   /backend/app/services/  @alice
+#   /frontend/src/features/tasks/ @bob
+* @3punch

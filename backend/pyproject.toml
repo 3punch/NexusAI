@@ -1,0 +1,21 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["app", "tests"]
+# Alembic migrations are machine-generated; linting them only creates noise.
+extend-exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+# E/W: pycodestyle, F: pyflakes, I: import order, B: bugbear, UP: pyupgrade
+select = ["E", "W", "F", "I", "B", "UP"]
+# B008: function calls in argument defaults are FastAPI's dependency-injection
+# idiom (Depends(...)); flagging them would drown the signal in noise.
+ignore = ["B008"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]

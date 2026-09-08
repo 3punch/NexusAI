@@ -1,0 +1,26 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      NEXUSAI_ENVIRONMENT: production
+      NEXUSAI_SECRET_KEY: ${NEXUSAI_SECRET_KEY:-dev-only-secret-change-me}
+      NEXUSAI_DATABASE_URL: ${NEXUSAI_DATABASE_URL:-sqlite:///./nexusai.db}
+      NEXUSAI_LLM_PROVIDER: ${NEXUSAI_LLM_PROVIDER:-mock}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  web:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install --no-fund --no-audit && npm run dev -- --host"
+    depends_on:
+      - api

@@ -1,0 +1,5 @@
+# Development & CI dependencies (includes runtime via -r)
+-r requirements.txt
+
+pytest>=8.2,<9.0
+ruff>=0.4

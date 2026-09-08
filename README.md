@@ -26,8 +26,13 @@ cd backend
 python -m venv .venv
 .venv\Scripts\activate            # Windows (source .venv/bin/activate on Unix)
 pip install -r requirements-dev.txt
+alembic upgrade head              # create/upgrade the database schema
 uvicorn app.main:app --reload     # API on http://localhost:8000
 ```
+
+> Migrations are a deliberate, explicit step — the app never silently
+> mutates its own schema. In Docker, the entrypoint runs
+> `alembic upgrade head` before starting the server.
 
 Frontend:
 

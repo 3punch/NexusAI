@@ -68,6 +68,7 @@ npm test
 | [`docs/TEAM_WORKFLOW.md`](docs/TEAM_WORKFLOW.md) | branching, pull requests, reviews, and merge policy |
 | [`docs/PR_REVIEW_WALKTHROUGH.md`](docs/PR_REVIEW_WALKTHROUGH.md) | a worked review of a flawed PR — learn to review with confidence |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | the practical rules for your first PR |
+| [`SECURITY.md`](SECURITY.md) | how to report vulnerabilities safely |
 
 ## The stack, and why
 

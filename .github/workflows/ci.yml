@@ -8,7 +8,7 @@ on:
 
 jobs:
   backend:
-    name: Backend — lint & test
+    name: backend
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -25,7 +25,7 @@ jobs:
       - run: pytest
 
   frontend:
-    name: Frontend — typecheck, build & test
+    name: frontend
     runs-on: ubuntu-latest
     defaults:
       run:

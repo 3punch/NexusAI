@@ -66,6 +66,7 @@ npm test
 | [`docs/REQUEST_FLOW.md`](docs/REQUEST_FLOW.md) | how a click becomes a database row and back — full traces with diagrams |
 | [`docs/ARCHITECTURE_COMPARISON.md`](docs/ARCHITECTURE_COMPARISON.md) | which ForgeFlow-AI ideas we adopted, which we avoided, and why |
 | [`docs/TEAM_WORKFLOW.md`](docs/TEAM_WORKFLOW.md) | branching, pull requests, reviews, and merge policy |
+| [`docs/PR_REVIEW_WALKTHROUGH.md`](docs/PR_REVIEW_WALKTHROUGH.md) | a worked review of a flawed PR — learn to review with confidence |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | the practical rules for your first PR |
 
 ## The stack, and why

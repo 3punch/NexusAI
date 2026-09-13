@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chess Game — static preview</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #f3f0e8;
+        font-family: Georgia, "Times New Roman", serif;
+        color: #1d2721;
+      }
+      h1 {
+        font-size: 1.2rem;
+        margin: 0 0 4px;
+      }
+      p.caption {
+        color: #66736c;
+        font-size: 0.85rem;
+        margin: 0 0 16px;
+      }
+      .board {
+        border: 1px solid #c4cdc2;
+        display: grid;
+        grid-template-columns: repeat(8, 44px);
+        width: max-content;
+      }
+      .square {
+        align-items: center;
+        aspect-ratio: 1;
+        display: flex;
+        font-size: 30px;
+        justify-content: center;
+        line-height: 1;
+      }
+      .light { background: #ece9dc; }
+      .dark { background: #a4b89f; }
+      .white { color: #f8f5ec; text-shadow: 0 0 1px #2c2c26, 0 1px 2px rgba(24, 34, 30, 0.6); }
+      .black { color: #1d2721; text-shadow: 0 1px 1px rgba(243, 240, 232, 0.25); }
+      .ranks {
+        display: grid;
+        grid-template-columns: repeat(8, 44px);
+        margin-top: 4px;
+      }
+      .ranks span { color: #66736c; font-size: 0.7rem; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <h1>Chess Game</h1>
+    <p class="caption">
+      Opening position (White to move). The platform preview sandbox intentionally does
+      not grant scripts, so this entry point stays a static board. For the fully
+      playable game, open play.html from this project directory in any browser.
+    </p>
+    <div class="board" role="img" aria-label="Chess board in the starting position">
+      <div class="square dark black">&#9820;</div><div class="square light white">&#9817;</div><div class="square dark white">&#9817;</div><div class="square light white">&#9817;</div><div class="square dark white">&#9817;</div><div class="square light white">&#9817;</div><div class="square dark white">&#9817;</div><div class="square light white">&#9817;</div>
+      <div class="square light white">&#9814;</div><div class="square dark white">&#9816;</div><div class="square light white">&#9815;</div><div class="square dark white">&#9813;</div><div class="square light white">&#9812;</div><div class="square dark white">&#9815;</div><div class="square light white">&#9816;</div><div class="square dark white">&#9814;</div>
+      <div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div>
+      <div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div>
+      <div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div>
+      <div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div><div class="square light"></div><div class="square dark"></div>
+      <div class="square dark black">&#9814;</div><div class="square light black">&#9816;</div><div class="square dark black">&#9815;</div><div class="square light black">&#9813;</div><div class="square dark black">&#9812;</div><div class="square light black">&#9815;</div><div class="square dark black">&#9816;</div><div class="square light black">&#9814;</div>
+      <div class="square light black">&#9823;</div><div class="square dark black">&#9823;</div><div class="square light black">&#9823;</div><div class="square dark black">&#9823;</div><div class="square light black">&#9823;</div><div class="square dark black">&#9823;</div><div class="square light black">&#9823;</div><div class="square dark black">&#9823;</div>
+    </div>
+    <div class="ranks">
+      <span>a8</span><span>b8</span><span>c8</span><span>d8</span><span>e8</span><span>f8</span><span>g8</span><span>h8</span>
+    </div>
+  </body>
+</html>

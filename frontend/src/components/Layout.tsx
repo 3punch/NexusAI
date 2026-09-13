@@ -33,6 +33,12 @@ export default function Layout() {
           >
             Calendar
           </NavLink>
+          <NavLink
+            to="/chess"
+            className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+          >
+            Chess
+          </NavLink>
         </nav>
         <div className="row">
           {user && <span className="muted">{user.email}</span>}

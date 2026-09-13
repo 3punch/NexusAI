@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:chess": "node public/chess/tests/engine.test.cjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.51.0",

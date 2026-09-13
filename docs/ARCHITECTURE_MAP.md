@@ -218,7 +218,15 @@ optimistic updates), `components/` (that feature's UI only).
 **What never belongs:** another feature's internals, global state, raw
 `fetch()` calls, business rules the backend should own.
 
-Current features: `auth`, `workspaces`, `tasks`, `actions`, `assistant`, `calendar`.
+Current features: `auth`, `workspaces`, `tasks`, `actions`, `assistant`, `calendar`, `chess`.
+
+**Static sub-app exception:** the chess game is a ported, self-contained
+third-party implementation (from the ForgeFlow `shayan-chess-game` member
+project) that lives under `frontend/public/chess/` and is served as plain
+static files at `/chess/`. Its feature slice (`features/chess/`) is a thin
+wrapper — a route, a nav link, and an iframe. No chess logic, styling, or
+state may leak into shared code; upgrade the game by replacing the files in
+`public/chess/` only.
 
 ### `lib/` — infrastructure, not features
 

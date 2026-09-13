@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chess Game — interactive demo</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #f3f0e8;
+        color: #1d2721;
+        font-family: Georgia, "Times New Roman", serif;
+      }
+      h1 {
+        font-size: 1.2rem;
+        margin: 0 0 4px;
+      }
+      .chess-intro {
+        color: #66736c;
+        font-size: 0.85rem;
+        margin: 0 0 20px;
+        max-width: 720px;
+      }
+      button {
+        font: inherit;
+      }
+      .chess-game {
+        align-items: start;
+        display: grid;
+        gap: 24px;
+        grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+        max-width: 980px;
+      }
+      .chess-board-frame {
+        position: relative;
+      }
+      .chess-board {
+        background: #fdfcf8;
+        border: 1px solid #c4cdc2;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        width: 100%;
+      }
+      .chess-square {
+        align-items: center;
+        aspect-ratio: 1;
+        border: 0;
+        display: flex;
+        justify-content: center;
+        min-width: 0;
+        padding: 0;
+        position: relative;
+      }
+      .chess-square.light {
+        background: #ece9dc;
+      }
+      .chess-square.dark {
+        background: #a4b89f;
+      }
+      .chess-square:disabled {
+        cursor: default;
+      }
+      .chess-square:not(:disabled) {
+        cursor: pointer;
+      }
+      .chess-piece {
+        font-size: clamp(1.4rem, 5.5vmin, 2.5rem);
+        line-height: 1;
+        pointer-events: none;
+        user-select: none;
+      }
+      .chess-piece.white {
+        color: #f8f5ec;
+        text-shadow:
+          0 0 1px #2c2c26,
+          0 1px 2px rgba(24, 34, 30, 0.6);
+      }
+      .chess-piece.black {
+        color: #1d2721;
+        text-shadow: 0 1px 1px rgba(243, 240, 232, 0.25);
+      }
+      .chess-square.selected {
+        box-shadow: inset 0 0 0 3px #d05b3b;
+      }
+      .chess-square.last-move::before {
+        background: rgba(208, 91, 59, 0.18);
+        content: "";
+        inset: 0;
+        position: absolute;
+      }
+      .chess-square.in-check {
+        box-shadow: inset 0 0 0 3px #b13f31;
+      }
+      .chess-square.move-target::after {
+        background: rgba(24, 34, 30, 0.35);
+        border-radius: 50%;
+        content: "";
+        height: 22%;
+        position: absolute;
+        width: 22%;
+      }
+      .chess-square.capture-target::after {
+        border: 3px solid rgba(177, 63, 49, 0.75);
+        border-radius: 50%;
+        content: "";
+        inset: 6%;
+        position: absolute;
+      }
+      .chess-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-width: 0;
+      }
+      .chess-status {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin: 0;
+      }
+      .chess-status.decisive {
+        color: #d05b3b;
+      }
+      .chess-captured {
+        display: grid;
+        gap: 6px 18px;
+        grid-template-columns: 1fr 1fr;
+      }
+      .chess-captured p {
+        margin: 0;
+      }
+      .chess-captured span:first-child {
+        color: #66736c;
+        display: block;
+        font-family: ui-monospace, Consolas, monospace;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+      }
+      .chess-captured span:last-child {
+        font-size: 1.25rem;
+      }
+      .chess-moves {
+        background: #f3f0e8;
+        border: 1px solid #d4d4c8;
+        font-family: ui-monospace, Consolas, monospace;
+        font-size: 0.8rem;
+        list-style: none;
+        margin: 0;
+        max-height: 180px;
+        overflow-y: auto;
+        padding: 12px 14px;
+      }
+      .chess-moves li {
+        padding: 2px 0;
+      }
+      .chess-moves:empty::after {
+        color: #66736c;
+        content: "No moves yet — white starts.";
+      }
+      .chess-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .chess-actions button {
+        background: #fdfcf8;
+        border: 1px solid #c4cdc2;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 8px 14px;
+      }
+      .chess-actions button:disabled {
+        cursor: default;
+        opacity: 0.5;
+      }
+      .chess-actions .primary-button {
+        background: #1d2721;
+        border-color: #1d2721;
+        color: #f3f0e8;
+      }
+      .chess-promotion {
+        align-items: center;
+        background: rgba(24, 34, 30, 0.55);
+        display: flex;
+        gap: 16px;
+        inset: 0;
+        justify-content: center;
+        position: absolute;
+        z-index: 2;
+      }
+      .chess-promotion p {
+        color: #f3f0e8;
+        font-family: ui-monospace, Consolas, monospace;
+        font-size: 0.72rem;
+        margin: 0;
+        text-transform: uppercase;
+      }
+      .chess-promotion > div {
+        display: flex;
+        gap: 8px;
+      }
+      .chess-promotion .promotion-choice {
+        border: 1px solid #c4cdc2;
+        height: 58px;
+        width: 58px;
+      }
+      @media (max-width: 800px) {
+        .chess-game {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Chess Game — interactive demo</h1>
+    <p class="chess-intro">
+      Full-rules chess with a built-in computer opponent. This page is part of the member
+      project sources and runs locally in any browser; the platform preview serves the
+      script-free <code>index.html</code> board instead, because the preview sandbox does
+      not grant scripts.
+    </p>
+    <div class="chess-game">
+      <div class="chess-board-frame">
+        <div class="chess-board" id="chess-board"></div>
+      </div>
+      <aside class="chess-panel" id="chess-panel"></aside>
+    </div>
+    <script src="engine.js"></script>
+    <script>
+      (() => {
+        "use strict";
+        const GLYPHS = {
+          king: "\u265A",
+          queen: "\u265B",
+          rook: "\u265C",
+          bishop: "\u265D",
+          knight: "\u265E",
+          pawn: "\u265F",
+        };
+        const PROMOTION_CHOICES = ["queen", "rook", "bishop", "knight"];
+
+        const boardElement = document.getElementById("chess-board");
+        const frameElement = boardElement.parentElement;
+        const panelElement = document.getElementById("chess-panel");
+
+        let history = [makeEntry(createInitialState(), "white", null, null)];
+        let selected = null;
+        let mode = "computer";
+        let thinking = false;
+        let pendingPromotion = null;
+        let computerTimer = null;
+
+        function makeEntry(state, mover, move, san) {
+          return { state, mover, move, san };
+        }
+
+        function currentState() {
+          return history[history.length - 1].state;
+        }
+
+        // Let the computer answer (as black) after a short pause.
+        function syncComputer() {
+          window.clearTimeout(computerTimer);
+          const state = currentState();
+          if (
+            mode !== "computer" ||
+            state.turn !== "black" ||
+            getStatus(state).result !== "in-progress"
+          ) {
+            thinking = false;
+            return;
+          }
+          thinking = true;
+          const scheduled = state;
+          computerTimer = window.setTimeout(() => {
+            const move = chooseComputerMove(scheduled, 3);
+            thinking = false;
+            if (move) {
+              const san = moveToSan(scheduled, move);
+              history = [
+                ...history,
+                makeEntry(applyMove(scheduled, move), scheduled.turn, move, san),
+              ];
+            }
+            render();
+          }, 250);
+        }
+
+        function commitMove(move) {
+          const state = currentState();
+          const san = moveToSan(state, move);
+          history = [...history, makeEntry(applyMove(state, move), state.turn, move, san)];
+          selected = null;
+          pendingPromotion = null;
+          syncComputer();
+          render();
+        }
+
+        function handleSquareClick(index) {
+          const state = currentState();
+          const status = getStatus(state);
+          const over = status.result !== "in-progress";
+          const blockedByMode = mode === "computer" && state.turn === "black";
+          const interactive = !over && !thinking && !blockedByMode && !pendingPromotion;
+          if (!interactive) return;
+
+          if (selected !== null) {
+            const candidates = legalMoves(state).filter(
+              (move) => move.from === selected && move.to === index,
+            );
+            if (candidates.length > 1 && candidates.every((move) => move.promotion)) {
+              pendingPromotion = candidates;
+              render();
+              return;
+            }
+            if (candidates.length === 1) {
+              commitMove(candidates[0]);
+              return;
+            }
+          }
+
+          const piece = state.board[index];
+          if (piece && piece.color === state.turn) {
+            selected = selected === index ? null : index;
+          } else {
+            selected = null;
+          }
+          render();
+        }
+
+        function undo() {
+          if (history.length <= 1) return;
+          let next = history.slice(0, -1);
+          if (mode === "computer") {
+            // Step back over the computer's reply so it is the player's turn again.
+            while (next.length > 1 && next[next.length - 1].state.turn === "black") {
+              next = next.slice(0, -1);
+            }
+          }
+          history = next;
+          selected = null;
+          pendingPromotion = null;
+          syncComputer();
+          render();
+        }
+
+        function reset() {
+          window.clearTimeout(computerTimer);
+          thinking = false;
+          history = [makeEntry(createInitialState(), "white", null, null)];
+          selected = null;
+          pendingPromotion = null;
+          render();
+        }
+
+        function toggleMode() {
+          mode = mode === "computer" ? "two-players" : "computer";
+          syncComputer();
+          render();
+        }
+
+        /** Pieces each side has captured (so `captured.white` holds black pieces). */
+        function capturedPieces() {
+          const captured = { white: [], black: [] };
+          for (const { mover, move } of history.slice(1)) {
+            if (move && move.captured) captured[mover].push(move.captured);
+          }
+          return captured;
+        }
+
+        function render() {
+          const state = currentState();
+          const status = getStatus(state);
+          const moves = legalMoves(state);
+          const over = status.result !== "in-progress";
+          const blockedByMode = mode === "computer" && state.turn === "black";
+          const interactive = !over && !thinking && !blockedByMode && !pendingPromotion;
+
+          const targets = new Set(
+            selected === null
+              ? []
+              : moves.filter((move) => move.from === selected).map((move) => move.to),
+          );
+          const captureTargets = new Set(
+            selected === null
+              ? []
+              : moves.filter((move) => move.from === selected && move.captured).map((move) => move.to),
+          );
+          const last = history[history.length - 1].move;
+          const captured = capturedPieces();
+          const checkSquare =
+            status.inCheck && status.result === "in-progress"
+              ? state.board.findIndex(
+                  (piece) => piece && piece.type === "king" && piece.color === state.turn,
+                )
+              : -1;
+
+          const statusLabel = over
+            ? status.result === "checkmate"
+              ? `Checkmate — ${status.winner === "white" ? "White" : "Black"} wins`
+              : "Stalemate — it is a draw"
+            : thinking
+              ? "Computer is thinking…"
+              : `${state.turn === "white" ? "White" : "Black"} to move${status.inCheck ? " — check!" : ""}`;
+
+          boardElement.replaceChildren();
+          state.board.forEach((piece, index) => {
+            const classes = [
+              "chess-square",
+              (Math.floor(index / 8) + (index % 8)) % 2 === 0 ? "light" : "dark",
+            ];
+            if (selected === index) classes.push("selected");
+            if (last && (last.from === index || last.to === index)) classes.push("last-move");
+            if (index === checkSquare) classes.push("in-check");
+            if (targets.has(index))
+              classes.push(captureTargets.has(index) ? "capture-target" : "move-target");
+
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = classes.join(" ");
+            button.setAttribute(
+              "aria-label",
+              `${squareName(index)}, ${piece ? `${piece.color} ${piece.type}` : "empty"}`,
+            );
+            button.disabled = !interactive && !targets.has(index);
+            button.addEventListener("click", () => handleSquareClick(index));
+            if (piece) {
+              const glyph = document.createElement("span");
+              glyph.className = `chess-piece ${piece.color}`;
+              glyph.setAttribute("aria-hidden", "true");
+              glyph.textContent = GLYPHS[piece.type];
+              button.appendChild(glyph);
+            }
+            boardElement.appendChild(button);
+          });
+
+          const existingPromotion = frameElement.querySelector(".chess-promotion");
+          if (existingPromotion) existingPromotion.remove();
+          if (pendingPromotion) {
+            const overlay = document.createElement("div");
+            overlay.className = "chess-promotion";
+            overlay.setAttribute("role", "dialog");
+            overlay.setAttribute("aria-label", "Choose a promotion piece");
+            const label = document.createElement("p");
+            label.textContent = "Promote to";
+            overlay.appendChild(label);
+            const choices = document.createElement("div");
+            for (const type of PROMOTION_CHOICES) {
+              const choice = document.createElement("button");
+              choice.type = "button";
+              choice.className = "chess-square light promotion-choice";
+              choice.setAttribute("aria-label", `Promote to ${type}`);
+              choice.addEventListener("click", () => {
+                const move = pendingPromotion.find((candidate) => candidate.promotion === type);
+                pendingPromotion = null;
+                selected = null;
+                if (move) commitMove(move);
+                else render();
+              });
+              const glyph = document.createElement("span");
+              glyph.className = `chess-piece ${state.turn}`;
+              glyph.setAttribute("aria-hidden", "true");
+              glyph.textContent = GLYPHS[type];
+              choice.appendChild(glyph);
+              choices.appendChild(choice);
+            }
+            overlay.appendChild(choices);
+            frameElement.appendChild(overlay);
+          }
+
+          const sans = history.slice(1).map((entry) => entry.san ?? "");
+          const moveRows = [];
+          for (let index = 0; index < sans.length; index += 2) {
+            moveRows.push(
+              `${index / 2 + 1}. ${sans[index]}${sans[index + 1] ? `  ${sans[index + 1]}` : ""}`,
+            );
+          }
+
+          panelElement.replaceChildren();
+
+          const statusLine = document.createElement("p");
+          statusLine.className = `chess-status${status.result === "checkmate" ? " decisive" : ""}`;
+          statusLine.textContent = statusLabel;
+          panelElement.appendChild(statusLine);
+
+          const capturedBox = document.createElement("div");
+          capturedBox.className = "chess-captured";
+          const capturedRows = [
+            ["White took", "black", captured.white],
+            ["Black took", "white", captured.black],
+          ];
+          for (const [labelText, glyphColor, pieces] of capturedRows) {
+            const line = document.createElement("p");
+            const name = document.createElement("span");
+            name.textContent = labelText;
+            const glyphs = document.createElement("span");
+            glyphs.className = `chess-piece ${glyphColor}`;
+            glyphs.setAttribute("aria-hidden", "true");
+            glyphs.textContent = pieces.map((type) => GLYPHS[type]).join("") || "—";
+            line.append(name, glyphs);
+            capturedBox.appendChild(line);
+          }
+          panelElement.appendChild(capturedBox);
+
+          const moveList = document.createElement("ol");
+          moveList.className = "chess-moves";
+          for (const row of moveRows) {
+            const item = document.createElement("li");
+            item.textContent = row;
+            moveList.appendChild(item);
+          }
+          panelElement.appendChild(moveList);
+
+          const actions = document.createElement("div");
+          actions.className = "chess-actions";
+          const undoButton = document.createElement("button");
+          undoButton.type = "button";
+          undoButton.textContent = "Undo";
+          undoButton.disabled = history.length <= 1 || thinking;
+          undoButton.addEventListener("click", undo);
+          const resetButton = document.createElement("button");
+          resetButton.type = "button";
+          resetButton.textContent = "New game";
+          resetButton.addEventListener("click", reset);
+          const modeButton = document.createElement("button");
+          modeButton.type = "button";
+          modeButton.className = "primary-button";
+          modeButton.textContent = mode === "computer" ? "Two players" : "Play vs computer";
+          modeButton.addEventListener("click", toggleMode);
+          actions.append(undoButton, resetButton, modeButton);
+          panelElement.appendChild(actions);
+        }
+
+        render();
+
+      })();
+    </script>
+  </body>
+</html>

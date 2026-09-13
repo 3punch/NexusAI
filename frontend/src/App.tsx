@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import ProtectedLayout from "./components/ProtectedLayout";
 import CalendarPage from "./features/calendar/components/CalendarPage";
+import ChessPage from "./features/chess/components/ChessPage";
 import { useBootstrapAuth } from "./features/auth/hooks/use-bootstrap-auth";
 import LoginPage from "./features/auth/components/LoginPage";
 import DashboardPage from "./features/tasks/components/DashboardPage";
@@ -19,6 +20,7 @@ export default function App() {
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/chess" element={<ChessPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

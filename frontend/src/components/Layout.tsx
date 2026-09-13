@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "../stores/auth-store";
 
@@ -19,6 +19,21 @@ export default function Layout() {
     <>
       <header className="app-header">
         <div className="brand">NexusAI</div>
+        <nav className="nav-links" aria-label="Primary">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+          >
+            Tasks
+          </NavLink>
+          <NavLink
+            to="/calendar"
+            className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+          >
+            Calendar
+          </NavLink>
+        </nav>
         <div className="row">
           {user && <span className="muted">{user.email}</span>}
           <button className="secondary" onClick={handleLogout}>

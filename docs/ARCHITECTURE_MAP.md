@@ -218,7 +218,7 @@ optimistic updates), `components/` (that feature's UI only).
 **What never belongs:** another feature's internals, global state, raw
 `fetch()` calls, business rules the backend should own.
 
-Current features: `auth`, `workspaces`, `tasks`, `actions`, `assistant`.
+Current features: `auth`, `workspaces`, `tasks`, `actions`, `assistant`, `calendar`.
 
 ### `lib/` — infrastructure, not features
 
@@ -262,6 +262,8 @@ erDiagram
     WORKSPACE ||--o{ TASK : "contains"
     WORKSPACE ||--o{ GOVERNED_ACTION : "audit ledger"
     USER ||--o{ TASK : "created_by"
+    WORKSPACE ||--o{ CALENDAR_EVENT : "schedules"
+    USER ||--o{ CALENDAR_EVENT : "created_by"
 
     USER {
         int id PK
@@ -279,6 +281,15 @@ erDiagram
         string status
         int workspace_id FK
     }
+    CALENDAR_EVENT {
+        int id PK
+        string title
+        string description
+        datetime starts_at
+        datetime ends_at
+        int workspace_id FK
+    }
+
     GOVERNED_ACTION {
         int id PK
         string kind

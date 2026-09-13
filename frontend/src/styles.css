@@ -158,6 +158,100 @@ button.danger {
   color: var(--muted);
 }
 
+/* --- primary navigation (Tasks / Calendar) --- */
+.nav-links {
+  display: flex;
+  gap: 0.4rem;
+  margin-left: 1.25rem;
+}
+
+.nav-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  color: var(--text);
+}
+
+.nav-link.active {
+  color: var(--text);
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+/* --- calendar month grid --- */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-head {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+  padding: 0.25rem 0;
+}
+
+.calendar-cell {
+  min-height: 76px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.calendar-cell:hover {
+  border-color: var(--accent);
+}
+
+.calendar-cell.out {
+  opacity: 0.4;
+}
+
+.calendar-cell.selected {
+  border-color: var(--accent);
+  outline: 1px solid var(--accent);
+}
+
+.calendar-cell.today .calendar-day-num {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.calendar-day-num {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.calendar-chip {
+  font-size: 0.68rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1px 4px;
+  text-align: left;
+  color: var(--text);
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar-more {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
 .login-wrapper {
   max-width: 380px;
   margin: 10vh auto 0;

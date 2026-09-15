@@ -261,6 +261,18 @@ button.danger {
   background: #fff;
 }
 
+/* --- notebooks catalogue --- */
+a.external-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+a.external-link:hover {
+  text-decoration: underline;
+}
+
 .login-wrapper {
   max-width: 380px;
   margin: 10vh auto 0;

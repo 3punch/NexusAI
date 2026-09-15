@@ -39,6 +39,12 @@ export default function Layout() {
           >
             Chess
           </NavLink>
+          <NavLink
+            to="/notebooks"
+            className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+          >
+            Notebooks
+          </NavLink>
         </nav>
         <div className="row">
           {user && <span className="muted">{user.email}</span>}

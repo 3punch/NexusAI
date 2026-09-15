@@ -218,7 +218,7 @@ optimistic updates), `components/` (that feature's UI only).
 **What never belongs:** another feature's internals, global state, raw
 `fetch()` calls, business rules the backend should own.
 
-Current features: `auth`, `workspaces`, `tasks`, `actions`, `assistant`, `calendar`, `chess`.
+Current features: `auth`, `workspaces`, `tasks`, `actions`, `assistant`, `calendar`, `chess`, `notebooks`.
 
 **Static sub-app exception:** the chess game is a ported, self-contained
 third-party implementation (from the ForgeFlow `shayan-chess-game` member

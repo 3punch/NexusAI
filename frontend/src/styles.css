@@ -273,6 +273,59 @@ a.external-link:hover {
   text-decoration: underline;
 }
 
+/* --- notebook viewer (executed output) --- */
+.nb-cell {
+  border-top: 1px solid var(--border);
+  padding: 0.5rem 0;
+}
+
+.nb-in {
+  font-size: 0.75rem;
+}
+
+.nb-code {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+
+.nb-out {
+  background: var(--bg);
+  border-left: 3px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+
+.nb-markdown {
+  white-space: pre-wrap;
+}
+
+.nb-error {
+  background: rgba(229, 72, 77, 0.08);
+  border-left: 3px solid var(--danger);
+  color: var(--danger);
+  padding: 0.4rem 0.6rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+
+.nb-plot {
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.nb-html {
+  overflow-x: auto;
+}
+
 .login-wrapper {
   max-width: 380px;
   margin: 10vh auto 0;

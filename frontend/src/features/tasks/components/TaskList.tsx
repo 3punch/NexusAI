@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { tasksApi, type Task, type TaskStatus } from "../api/tasks-api";
 import { useTasks } from "../hooks/use-tasks";
+import { formatApiError } from "../../../lib/api-client";
 
 const STATUS_LABELS: Record<TaskStatus, string> = {
   todo: "To do",
@@ -37,7 +38,7 @@ export default function TaskList({ workspaceId, onProposeDelete }: Props) {
   if (tasks.isError) {
     return (
       <div className="card">
-        <div className="error-text">{String(tasks.error)}</div>
+        <div className="error-text">{formatApiError(tasks.error)}</div>
       </div>
     );
   }

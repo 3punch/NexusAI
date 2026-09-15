@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useAuthStore } from "../stores/auth-store";
-import { ApiError, apiFetch } from "./api-client";
+import { ApiError, apiFetch, formatApiError } from "./api-client";
 
 const fetchMock = vi.fn();
 
@@ -60,5 +60,21 @@ describe("apiFetch 401 recovery", () => {
       ApiError,
     );
     expect(useAuthStore.getState().accessToken).toBeNull();
+  });
+});
+
+describe("formatApiError", () => {
+  it("maps known machine codes to friendly copy", () => {
+    const error = new ApiError(403, "not_a_workspace_member", undefined);
+    expect(formatApiError(error)).toBe("You don't have access to that workspace.");
+  });
+
+  it("passes unknown machine codes through as-is", () => {
+    const error = new ApiError(400, "some_other_code", undefined);
+    expect(formatApiError(error)).toBe("some_other_code");
+  });
+
+  it("stringifies non-ApiError values", () => {
+    expect(formatApiError(new Error("boom"))).toBe("Error: boom");
   });
 });

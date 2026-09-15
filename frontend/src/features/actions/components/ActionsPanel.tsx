@@ -1,3 +1,4 @@
+import { formatApiError } from "../../../lib/api-client";
 import { useActions } from "../hooks/use-actions";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -57,9 +58,9 @@ export default function ActionsPanel({ workspaceId }: Props) {
           </div>
         ))}
       </div>
-      {decide.isError && <div className="error-text">{String(decide.error)}</div>}
+      {decide.isError && <div className="error-text">{formatApiError(decide.error)}</div>}
       {proposeDelete.isError && (
-        <div className="error-text">{String(proposeDelete.error)}</div>
+        <div className="error-text">{formatApiError(proposeDelete.error)}</div>
       )}
     </div>
   );

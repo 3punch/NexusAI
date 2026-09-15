@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 
+import { formatApiError } from "../../../lib/api-client";
 import { useAskAssistant } from "../hooks/use-ask-assistant";
 
 interface Props {
@@ -35,7 +36,7 @@ export default function AssistantPanel({ workspaceId }: Props) {
           {ask.isPending ? "Thinking…" : "Ask"}
         </button>
       </form>
-      {ask.isError && <div className="error-text">{String(ask.error)}</div>}
+      {ask.isError && <div className="error-text">{formatApiError(ask.error)}</div>}
       {ask.data && (
         <div>
           <strong>{ask.data.provider}:</strong> {ask.data.answer}

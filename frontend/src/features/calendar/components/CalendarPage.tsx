@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { formatApiError } from "../../../lib/api-client";
 import { useMyWorkspaces } from "../../workspaces/hooks/use-my-workspaces";
 import type { CalendarEvent } from "../api/calendar-api";
 import {
@@ -168,7 +169,7 @@ export default function CalendarPage() {
 
       {events.isError && (
         <div className="card">
-          <div className="error-text">{String(events.error)}</div>
+          <div className="error-text">{formatApiError(events.error)}</div>
         </div>
       )}
 
@@ -274,7 +275,7 @@ export default function CalendarPage() {
                 ))}
               </div>
               {deleteEvent.isError && (
-                <div className="error-text">{String(deleteEvent.error)}</div>
+                <div className="error-text">{formatApiError(deleteEvent.error)}</div>
               )}
               <div className="row" style={{ marginTop: "0.6rem" }}>
                 <button type="button" onClick={() => setCreating(true)}>
@@ -290,7 +291,7 @@ export default function CalendarPage() {
               mode={editing ? "edit" : "create"}
               initial={formInitial}
               busy={createEvent.isPending || updateEvent.isPending}
-              error={formError ? formError.message : null}
+              error={formError ? formatApiError(formError) : null}
               onCancel={clearFormState}
               onSubmit={(values) => {
                 const startsAtIso = localInputToIso(values.startsAtLocal);

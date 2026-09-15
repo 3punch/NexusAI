@@ -22,6 +22,20 @@ export class ApiError extends Error {
   }
 }
 
+/** Stable machine error codes → human copy. Unknown codes fall back to raw. */
+const FRIENDLY_ERRORS: Record<string, string> = {
+  not_a_workspace_member: "You don't have access to that workspace.",
+  proposer_cannot_approve: "You can't approve your own action.",
+  action_already_decided: "This action has already been decided.",
+};
+
+export function formatApiError(error: unknown): string {
+  if (error instanceof ApiError) {
+    return FRIENDLY_ERRORS[error.message] ?? error.message;
+  }
+  return String(error);
+}
+
 interface RequestOptions {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
   body?: unknown;

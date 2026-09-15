@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 
+import { formatApiError } from "../../../lib/api-client";
 import { useCreateTask } from "../hooks/use-create-task";
 
 interface Props {
@@ -42,7 +43,7 @@ export default function CreateTaskForm({ workspaceId }: Props) {
           aria-label="Task description"
         />
         {createTask.isError && (
-          <div className="error-text">{String(createTask.error)}</div>
+          <div className="error-text">{formatApiError(createTask.error)}</div>
         )}
         <div className="row">
           <button type="submit" disabled={createTask.isPending || !title.trim()}>

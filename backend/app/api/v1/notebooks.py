@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user
 from app.api.errors import http_error_for
+from app.core.config import get_settings
 from app.db.session import get_db
 from app.models import User
 from app.schemas.notebook import NotebookExecuted, NotebookRunRequest
@@ -31,6 +32,9 @@ def run_notebook(
 ) -> NotebookExecuted:
     service = NotebookService()
     try:
+        if not get_settings().enable_notebooks:
+            # Serverless deployments carry no ML/Jupyter stack — gate is env-driven.
+            raise BusinessRuleError("notebooks_disabled")
         result = service.run(user_id=current_user.id, file_name=payload.file_name)
     except DOMAIN_ERRORS as exc:
         raise http_error_for(exc) from None

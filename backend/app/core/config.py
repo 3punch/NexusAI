@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     openai_model: str = "gpt-4o-mini"
 
+    # Notebook execution gate — serverless platforms (Vercel) can't carry the
+    # ML execution stack, so deployments there set this to false. Locally it
+    # stays enabled. See api/index.py + vercel.json.
+    enable_notebooks: bool = True
+
     # CORS (only relevant when the SPA is served from a different origin)
     cors_origins: list[str] = []
 

@@ -20,8 +20,6 @@ import json
 import time
 from pathlib import Path
 
-import nbformat
-from nbclient import NotebookClient
 from sqlalchemy.orm import Session
 
 from app.services.errors import BusinessRuleError, NotFoundError
@@ -39,6 +37,12 @@ class NotebookService:
 
     def run(self, *, user_id: int, file_name: str) -> dict:
         """Execute a repo-root notebook and return its executed cells."""
+        # Lazy imports: the ML/Jupyter stack is not installed on serverless
+        # deployments (see api/index.py); the router gates those off before
+        # this method is ever reached there.
+        import nbformat
+        from nbclient import NotebookClient
+
         target = self._resolve(file_name)
         notebook = nbformat.read(target, as_version=4)
         client = NotebookClient(

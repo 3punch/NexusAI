@@ -79,6 +79,26 @@ npm test
 - **TanStack Query + Zustand** — server state and client state, separated
 - **GitHub Actions CI** — every PR is linted, tested, and built
 
+## Deploy on Vercel
+
+The repo ships with a serverless adapter (`api/index.py` + `vercel.json`):
+the Vite SPA is served statically and `/api/*`, `/health`, `/docs` run as a
+FastAPI serverless function on the same origin.
+
+**Platform realities (read first):**
+- The serverless filesystem is **ephemeral** — SQLite lives in `/tmp`, so
+  data resets on cold starts/redeploys. Great for a demo; for persistent
+  data set `NEXUSAI_DATABASE_URL` to a hosted PostgreSQL.
+- **Notebook execution is disabled** on serverless (the ML/Jupyter stack
+  does not fit the function bundle). It stays fully available locally.
+- Set `NEXUSAI_SECRET_KEY` in the Vercel project env vars (auth tokens).
+
+**Two ways to deploy:**
+1. **Dashboard (no CLI):** [vercel.com/new](https://vercel.com/new) → import
+   `3punch/NexusAI` → the settings come from `vercel.json` → Deploy. Every
+   push to `main` then auto-deploys.
+2. **CLI:** `npm i -g vercel` → `vercel login` → `vercel --prod`
+
 ## License
 
 MIT.

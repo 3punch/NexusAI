@@ -85,3 +85,25 @@ def test_run_unknown_notebook_returns_404(client: TestClient) -> None:
         headers=auth_headers(session["token"]),
     )
     assert response.status_code == 404
+
+
+def test_run_disabled_by_settings_returns_409(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The serverless deployments gate: disabled => 409 notebooks_disabled."""
+    session = register_and_login(client)
+    monkeypatch.setenv("NEXUSAI_ENABLE_NOTEBOOKS", "false")
+    from app.core.config import get_settings
+
+    get_settings.cache_clear()
+    try:
+        response = client.post(
+            "/api/v1/notebooks/run",
+            json={"file_name": "x.ipynb"},
+            headers=auth_headers(session["token"]),
+        )
+    finally:
+        monkeypatch.undo()
+        get_settings.cache_clear()
+    assert response.status_code == 409
+    assert response.json()["detail"] == "notebooks_disabled"

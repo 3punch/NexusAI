@@ -27,6 +27,7 @@ const FRIENDLY_ERRORS: Record<string, string> = {
   not_a_workspace_member: "You don't have access to that workspace.",
   proposer_cannot_approve: "You can't approve your own action.",
   action_already_decided: "This action has already been decided.",
+  notebooks_disabled: "Notebook execution is disabled on this deployment (available when running locally).",
 };
 
 export function formatApiError(error: unknown): string {
